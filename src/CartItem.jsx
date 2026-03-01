@@ -7,30 +7,56 @@ const CartItem = ({ onContinueShopping }) => {
   const cart = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
 
-  // Calculate total amount for all products in the cart
-  const calculateTotalAmount = () => {
- 
-  };
+  // Calculate total amount for all items in the cart
+const calculateTotalAmount = () => {
+  let total = 0;
+  cart.forEach((item) => {
+    // Convert "$15" to 15.00
+    const price = parseFloat(item.cost.substring(1));
+    total += price * item.quantity;
+  });
+  return total;
+};
+
+// Calculate subtotal for a specific item type
+const calculateTotalCost = (item) => {
+  const price = parseFloat(item.cost.substring(1));
+  return price * item.quantity;
+};
 
   const handleContinueShopping = (e) => {
-   
-  };
+  // 1. Prevent the default behavior (like refreshing the page)
+  if (e) e.preventDefault();
+  
+  // 2. Call the function that was passed down as a prop
+  onContinueShopping(e);
+};
 
 
 
-  const handleIncrement = (item) => {
-  };
+ const handleIncrement = (item) => {
+  dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
+};
 
-  const handleDecrement = (item) => {
-   
-  };
+const handleDecrement = (item) => {
+  if (item.quantity > 1) {
+    dispatch(updateQuantity({ name: item.name, quantity: item.quantity - 1 }));
+  } else {
+    // If it hits 0, we remove it entirely
+    dispatch(removeItem(item.name));
+  }
+};
 
-  const handleRemove = (item) => {
-  };
+const handleRemove = (item) => {
+  dispatch(removeItem(item.name));
+};
 
-  // Calculate total cost based on quantity for an item
-  const calculateTotalCost = (item) => {
-  };
+const handleCheckoutShopping = (e) => {
+  alert('Functionality to be added for future reference');
+};
+
+
+
 
   return (
     <div className="cart-container">
